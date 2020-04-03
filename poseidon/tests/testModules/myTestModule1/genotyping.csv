@@ -1,0 +1,6 @@
+GenotypingID;SequencingLabID;GenotypingSnpSetName;GenotypingPositionsFile;GenotypingGenotypeFile;GenotypingFileFormat;GenotypingColumnPosition;GenotypingMethod;GenotypingTool;GenotypingNote;Source
+12880A-SG-1204k-pulldown;12880A-SG;1240k;genodata/genotypes.eigenstrat.snp;genodata/genotypes.eigenstrat.geno;EIGENSTRAT;1;RandomReadSampling;PileupCaller;;;"Example: shortened to just 100 sites";schiffels2016
+12881A-SG-1204k-pulldown;12881A-SG;1240k;genodata/genotypes.eigenstrat.snp;genodata/genotypes.eigenstrat.geno;EIGENSTRAT;2;RandomReadSampling;PileupCaller;"Example: shortened to just 100 sites";schiffels2016
+12883A-SG-1204k-pulldown;12883A-SG;1240k;genodata/genotypes.eigenstrat.snp;genodata/genotypes.eigenstrat.geno;EIGENSTRAT;3;RandomReadSampling;PileupCaller;"Example: shortened to just 100 sites";schiffels2016
+12884A-SG-1204k-pulldown;12884A-SG;1240k;genodata/genotypes.eigenstrat.snp;genodata/genotypes.eigenstrat.geno;EIGENSTRAT;4;RandomReadSampling;PileupCaller;"Example: shortened to just 100 sites";schiffels2016
+12885A-SG-1204k-pulldown;12885A-SG;1240k;genodata/genotypes.eigenstrat.snp;genodata/genotypes.eigenstrat.geno;EIGENSTRAT;5;RandomReadSampling;PileupCaller;"Example: shortened to just 100 sites";schiffels2016

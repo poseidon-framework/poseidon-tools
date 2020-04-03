@@ -1,0 +1,5 @@
+C14LabID,SampleID,C14labName,C14uncalDateBP,C14uncalDateErrBP,C14calDateMedianBP,C14calDateLower2SigmaBP,C14calDateUpper2SigmaBP,C14dateType,C14note,Source
+SUERC-14246,15579A,"SUERC Radiocarbon Laboratory",2155,35,"",2310,2000,direkt,"",schiffels2016
+OxA-29573,12880A,"Oxford Radiocarbon Accelerator Unit",2039,27,"",2110,1976,direkt,"",schiffels2016,
+Wk-12599,12884A,"The University of Waikato Radiocarbon Dating Laboratory",2029,49,"",2120,1870,direkt,"",schiffels2016
+OxA-29574,12881A,"Oxford Radiocarbon Accelerator Unit",1288,25,"",1284,1180,direkt,"",schiffels2016
