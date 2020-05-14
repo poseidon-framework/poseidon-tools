@@ -1,0 +1,29 @@
+{
+    "@context": ["http://www.w3.org/ns/csvw"],
+    "dc:conformsTo": "http://w3id.org/poseidon/terms.rdf.jsonld#PackageInfo",
+    "dc:description": "Genetic data published in Schiffels et al. 2016",
+    "dc:title": "AncientBritish2016",
+    "dc:contributor": {
+        "dc:name" : "Stephan Schiffels",
+        "dc:email" : "stephan.schiffels@institute.org"
+    },
+    "dc:modified": {"@value": "2020-02-28", "@type": "date"},
+    "dc:license" : "CC-BY",
+    "dc:source" : "sources.bib",
+    "tables": [{
+        "url" : "sites.csv",
+        "tableSchema" : "https://w3id.org/poseidon/sitesTable-schema.json"
+    }, {
+        "url" : "individuals.csv",
+        "tableSchema" : "https://w3id.org/poseidon/individualsTable-schema.json"
+    }, {
+        "url" : "c14dating.csv",
+        "tableSchema" : "https://w3id.org/poseidon/c14dating-table-schema.json"
+    }, {
+        "url" : "sequencing.csv",
+        "tableSchema" : "https://w3id.org/poseidon/dnaSequencing-table-schema.json"
+    }, {
+        "url" : "genotypes.csv",
+        "tableSchema" : "https://w3id.org/poseidon/genotyping-table-schema.json"
+    }]
+}

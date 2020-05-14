@@ -1,0 +1,618 @@
+{
+    "@context": ["http://www.w3.org/ns/csvw"],
+    "dc:conformsTo": "http://w3id.org/poseidon/terms.rdf.jsonld#PackageInfo",
+    "dc:description": "Genetic data published in Schiffels et al. 2016",
+    "dc:title": "AncientBritish2016",
+    "dc:contributor": {
+        "dc:name" : "Stephan Schiffels",
+        "dc:email" : "stephan.schiffels@institute.org"
+    },
+    "dc:modified": {"@value": "2020-02-28", "@type": "date"},
+    "dc:license" : "CC-BY",
+    "dc:source" : "sources.bib",
+    "tables": [{
+        "url" : "sites.csv",
+        "tableSchema" : {
+            "dc:conformsTo" : "http://w3id.org/poseidon/terms.rdf.jsonld#SitesTableInfo",
+            "columns" : [{
+                "name" : "SiteID",
+                "titles" : "SiteID",
+                "dc:description" : "The ID of the site. Can be any alphanumeric string including - and _",
+                "datatype" : {
+                    "base" : "string",
+                    "format" : "[a-zA-Z0-9_\\-]+"
+                },
+                "propertyUrl" : "dc:identifier",
+                "required" : true
+            }, {
+                "name" : "SiteName",
+                "titles" : "SiteName",
+                "dc:description" : "The name of the site",
+                "datatype" : "string",
+                "propertyUrl" : "schema:name",
+                "required" : true
+            }, {
+                "name" : "CountryCode",
+                "titles" : "CountryCode",
+                "dc:description" : "The Country ISO three-letter code that the site is in",
+                "propertyUrl" : "schema:addressCountry",
+                "datatype" : {
+                    "base" : "string",
+                    "format" : "[A-Z]{3}"
+                },
+                "required" : true
+            }, {
+                "name": "ProvinceName",
+                "titles": "ProvinceName",
+                "dc:description" : "The sub-national administrative region (e.g. Province) that the site is in.",
+                "propertyUrl" : "schema:addressRegion"
+            }, {
+                "name": "LocalityName",
+                "titles": "LocalityName",
+                "dc:description" : "The nearest town or city of the site",
+                "propertyUrl" : "schema:addressLocality"
+            }, {
+                "name": "Latitude",
+                "titles": "Latitude",
+                "dc:description" : "A latitude in the WGS 84 standard coordinate system (see https://en.wikipedia.org/wiki/World_Geodetic_System), specified as decimal number of degrees.",
+                "datatype" : {
+                    "base": "decimal",
+                    "minimum" : -90,
+                    "maximum": 90
+                },
+                "propertyUrl" : "schema:latitude",
+                "required" : true
+            }, {
+                "name": "Longitude",
+                "titles": "Longitude",
+                "dc:description" : "A longitude in the WGS 84 standard coordinate system (see https://en.wikipedia.org/wiki/World_Geodetic_System), specified as decimal number of degrees.",
+                "datatype" : {
+                    "base": "decimal",
+                    "minimum" : -180,
+                    "maximum": 180
+                },
+                "propertyUrl" : "schema:longitude",
+                "required" : true
+            }, {
+                "name": "SiteNote",
+                "titles": "SiteNote",
+                "dc:description" : "(Optional) note for the site",
+                "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#siteNote"
+            }, {
+                "name" : "Source",
+                "titles" : "Source",
+                "dc:description" : "BibTEX key(s) for bibliographical source(s)",
+                "separator" : ";",
+                "datatype" : {
+                    "base" : "string",
+                    "format" : "[a-zA-Z0-9_\\-]+"
+                },
+                "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#source"
+            }],
+            "primaryKey": "ID"
+        }
+    }, {
+        "url" : "individuals.csv",
+        "tableSchema" : {
+            "dc:conformsTo" : "http://w3id.org/poseidon/terms.rdf.jsonld#IndividualsTableInfo",
+            "tableSchema" :  {
+                "columns" : [{
+                    "name" : "IndividualID",
+                    "titles" : "IndividualID",
+                    "dc:description" : "Unique identifier for an individual. Can be alphanumeric and include - and _",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "dc:identifier",
+                    "required" : true    
+                }, {
+                    "name" : "SiteID",
+                    "titles" : "SiteID",
+                    "dc:description" : "Foreign Key into the Sites-Table. Gives the ID of the site from which the individual is.",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#siteReference",
+                    "required" : true
+                }, {
+                    "name" : "CollectionID",
+                    "titles" : "CollectionID",
+                    "dc:description" : "Identifier for the individual used in the museum or archaeological/anthropological collection. This is usually different from the ID which is set by the laboratory analysing the individual.",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#collectionID",
+                    "required" : true
+                }, {
+                    "name" : "ContextualDateLower",
+                    "titles" : "ContextualDateLower",
+                    "dc:description" : "Lower bound of contextual date of the individual, in BP",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#contextualDateLower"
+                }, {
+                    "name" : "ContextualDateUpper",
+                    "titles" : "ContextualDateUpper",
+                    "dc:description" : "Upper bound of contextual date of the individual, in BP",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#contextualDateUpper"
+                }, {
+                    "name" : "ArchaeologicalCulture",
+                    "titles" : "ArchaeologicalCulture",
+                    "dc:description" : "Terms that describe the archaeological culture",
+                    "datatype" : "string",
+                    "separator" : ";",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#archaeologicalCulture"
+                }, {
+                    "name" : "GroupLabel",
+                    "titles" : "GroupLabel",
+                    "dc:description" : "A label used to group this individual with other individuals",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#groupLabel"
+                }, {
+                    "name" : "IndividualNote",
+                    "titles" : "IndividualNote",
+                    "dc:description" : "(Optional) note for the individual",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#individualNote"
+                }, {
+                    "name" : "Source",
+                    "titles" : "Source",
+                    "dc:description" : "BibTEX key(s) for bibliographical source(s)",
+                    "separator" : ";",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#source"
+                }],
+                "primaryKey" : "IndividualID",
+                "foreignKeys": [{
+                    "columnReference": "IndividualID",
+                    "reference": {
+                        "resource": "sites.csv",
+                        "columnReference": "SiteID"
+                    }
+                }]
+            }
+        }
+    }, {
+        "url" : "c14dating.csv",
+        "tableSchema" : {
+            "dc:conformsTo" : "http://w3id.org/poseidon/terms.rdf.jsonld#DateTableInfo",
+            "tableSchema" :  {
+                "columns" : [{
+                    "name" : "C14LabID",
+                    "titles" : "C14LabID",
+                    "dc:description" : "Lab ID of the date",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "dc:identifier"
+                }, {
+                    "name" : "IndividualID",
+                    "titles" : "IndividualID",
+                    "dc:description" : "Foreign Key into the Individuals-Table. Gives the ID of the individual for which the date holds",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#individualReference"
+                }, {
+                    "name" : "C14labName",
+                    "titles" : "C14labName",
+                    "dc:description" : "Name of the lab performing the C14 dating",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14labName"
+                }, {
+                    "name" : "C14uncalDateBP",
+                    "titles" : "C14uncalDateBP",
+                    "datatype" : "nonNegativeInteger",
+                    "dc:description" : "uncalibrated date measurement from C14",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14uncalDateBP",
+                    "required" : true
+                }, {
+                    "name" : "C14uncalDateErrBP",
+                    "titles" : "C14uncalDateErrBP",
+                    "datatype" : "nonNegativeInteger",
+                    "dc:description" : "uncalibrated date measurement error from C14",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14uncalDateErrBP",
+                    "required" : true
+                }, {
+                    "name" : "C14calDateMedianBP",
+                    "titles" : "C14calDateMedianBP",
+                    "dc:description" : "(Optional) median calibrated date in BP",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl": "http://w3id.org/poseidon/terms.rdf.jsonld#C14calDateMedianBP"
+                }, {
+                    "name" : "C14calDateLower2SigmaBP",
+                    "titles" : "calDateLower2SigmaBP",
+                    "dc:description" : "(Optional) lower end of 2sigma range of calibrated date in BP",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl": "http://w3id.org/poseidon/terms.rdf.jsonld#C14calDateLower2SigmaBP"
+                }, {
+                    "name" : "C14calDateUpper2SigmaBP",
+                    "titles" : "calDateUpper2SigmaBP",
+                    "dc:description" : "(Optional) upper end of 2sigma range of calibrated date in BP",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl": "http://w3id.org/poseidon/terms.rdf.jsonld#C14calDateUpper2SigmaBP"
+                }, {
+                    "name" : "C14dateType",
+                    "titles" : "C14dateType",
+                    "dc:description" : "Can be either \"direct\" or \"indirect\" (e.g. through charcoal at the site)",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "direct|indirect"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14dateType"
+                }, {
+                    "name" : "C14note",
+                    "titles" : "C14note",
+                    "dc:description" : "Optional note for the C14 date",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14note"
+                }, {
+                    "name" : "Source",
+                    "titles" : "Source",
+                    "dc:description" : "BibTEX key(s) for bibliographical source(s)",
+                    "separator" : ";",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#source"
+                }],
+                "primaryKey" : "C14LabID",
+                "foreignKeys": [{
+                    "columnReference": "IndividualID",
+                    "reference": {
+                        "resource": "individuals.csv",
+                        "columnReference": "IndividualID"
+                    }
+                }]
+            }
+        }
+    }, {
+        "url" : "sequencing.csv",
+        "tableSchema" : {
+            "dc:conformsTo" : "http://w3id.org/poseidon/terms.rdf.jsonld#SeqTableInfo",
+            "tableSchema" :  {
+                "columns" : [{
+                    "name" : "SequencingLabID",
+                    "titles" : "SequencingLabID",
+                    "dc:description" : "ID of the lab generating the sequencing data",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "dc:identifier",
+                    "required" : true
+                }, {
+                    "name" : "IndividualID",
+                    "titles" : "IndividualID",
+                    "dc:description" : "Foreign Key into the Individuals-Table. Gives the ID of the individual that is analysed.",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#individualReference",
+                    "required" : true
+                }, {
+                    "name" : "SeqLabName",
+                    "titles" : "SeqLabName",
+                    "dc:description" : "Name of the lab performing the Sequencing",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#seqLabName",
+                    "required" : true
+                }, {
+                    "name" : "SkeletalElement",
+                    "titles" : "SkeletalElement",
+                    "dc:description" : "Name of the skeletal element analysed",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[Tooth|Petrous|OtherBone|OtherTissue]"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#tissueType",
+                    "required" : true
+                }, {
+                    "name" : "LibraryType",
+                    "titles" : "LibraryType",
+                    "dc:description" : "DNA Library construction (Non-UDG, UDG-half, UDG-full, Single-Stranded-Non-UDG, Multiple)",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "non-UDG|UDG-half|UDG-full|Single-Stranded-Non-UDG|Multiple"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#libraryType",
+                    "required" : true
+                }, {
+                    "name" : "CaptureType",
+                    "titles" : "CaptureType",
+                    "dc:description" : "Type of Capture (NoCapture, 1240Kcapture, MTcapture, OtherCapture). If not given, assume NoCapture",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "NoCapture|1240Kcapture|MTcapture|OtherCapture"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#captureType"
+                }, {
+                    "name" : "CaptureNote",
+                    "titles" : "CaptureNote",
+                    "dc:description" : "Note describing the capture, in particular of CaptureType was \"OtherCapture\"",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#captureNote"
+                }, {
+                    "name" : "NrReadsSequenced",
+                    "titles" : "NrReadsSequenced",
+                    "dc:description" : "Number of raw read or read-pairs sequenced",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrReadsSequenced",
+                    "required" : true
+                }, {
+                    "name" : "ReferenceGenome",
+                    "titles" : "ReferenceGenome",
+                    "dc:description" : "Name of reference genome. If Human, use HG19 or HG38.",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#referenceGenome",
+                    "required" : true
+                }, {
+                    "name" : "NrReadsMapped",
+                    "titles" : "NrReadsMapped",
+                    "dc:description" : "Number of reads mapped to the reference genome.",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrReadsMapped",
+                    "required" : true
+                }, {
+                    "name" : "NrReadsMappedQF30",
+                    "titles" : "NrReadsMappedQF30",
+                    "dc:description" : "Number of reads mapped to the reference genome, filtered for mapping quality <=30",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrReadsMappedQF30"
+                }, {
+                    "name" : "NrReadsMappedUnique",
+                    "titles" : "NrReadsMappedUnique",
+                    "dc:description" : "Number of unique reads mapped to the reference genome.",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrReadsMappedUnique",
+                    "required" : true
+                }, {
+                    "name" : "NrReadsMappedUniqueQF30",
+                    "titles" : "NrReadsMappedUniqueQF30",
+                    "dc:description" : "Number of unique reads mapped to the reference genome, filtered for mapping quality >= 30",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrReadsMappedUniqueQF30"
+                }, {
+                    "name" : "rawReadsRepository",
+                    "titles" : "rawReadsRepository",
+                    "dc:description" : "Repository for sequencing data. Can be \"ENA\" or \"SRA\"",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "ENA|SRA"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#rawReadsRepository"
+                }, {
+                    "name" : "rawReadsAccessionNrs",
+                    "titles" : "rawReadsAccessionNrs",
+                    "dc:description" : "Accession number(s) to raw read files and/or alignments",
+                    "separator" : ";",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[A-Z0-9]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#rawReadsAccessionNr"
+                }, {
+                    "name" : "frac5pCT",
+                    "titles" : "frac5pCT",
+                    "dc:description" : "Fraction of reads with C->T substitutions at the 5p end of the read. Used as a proxy for post-mortem DNA damage",
+                    "datatype" : {
+                        "base": "decimal",
+                        "minimum" : 0,
+                        "maximum": 1
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#frac5pCT"
+                }, {
+                    "name" : "frac3pGA",
+                    "titles" : "frac3pGA",
+                    "dc:description" : "Fraction of reads with G->A substitutions at the 3p end of the read. Used as a proxy for post-mortem DNA damage",
+                    "datatype" : {
+                        "base": "decimal",
+                        "minimum" : 0,
+                        "maximum": 1
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#frac3pGA"
+                }, {
+                    "name" : "fracContam",
+                    "titles" : "fracContam",
+                    "dc:description" : "Estimate for the library contamination",
+                    "datatype" : {
+                        "base": "decimal",
+                        "minimum" : 0,
+                        "maximum": 1
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#fracContam"
+                }, {
+                    "name" : "contamNote",
+                    "titles" : "contamNote",
+                    "dc:description" : "Optional note for how the contamination was estimated",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#contamNote"
+                }, {
+                    "name" : "geneticSex",
+                    "titles" : "geneticSex",
+                    "dc:description" : "Inferred sex genotype (XX, XY, Other)",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "XX|XY|Other"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#geneticSex"
+                }, {
+                    "name" : "MThaplotype",
+                    "titles" : "MThaplotype",
+                    "dc:description" : "Mitochondrial haplotype",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[A-Z0-0\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#mtHaplotype"
+                }, {
+                    "name" : "Yhaplotype",
+                    "titles" : "Yhaplotype",
+                    "dc:description" : "Y chromosome haplotype",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[A-Z0-0…\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#yHaplotype"
+                }, {
+                    "name" : "seqNote",
+                    "titles" : "seqNote",
+                    "dc:description" : "Optional general note for the sequencing data",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#seqNote"
+                }, {
+                    "name" : "Source",
+                    "titles" : "Source",
+                    "dc:description" : "BibTEX key(s) for bibliographical source(s)",
+                    "separator" : ";",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#source"
+                }],
+                "primaryKey" : "SequencingLabID",
+                "foreignKeys": [{
+                    "columnReference": "IndividualID",
+                    "reference": {
+                        "resource": "individuals.csv",
+                        "columnReference": "IndividualID"
+                    }
+                }]
+            }
+        }
+        
+    }, {
+        "url" : "genotypes.csv",
+        "tableSchema" : {
+            "dc:conformsTo" : "http://w3id.org/poseidon/terms.rdf.jsonld#GenoTableInfo",
+            "tableSchema" :  {
+                "columns" : [{
+                    "name" : "GenotypingID",
+                    "titles" : "GenotypingID",
+                    "dc:description" : "ID of a particular genotyping pulldown for a specific sample",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "dc:identifier",
+                    "required" : true
+                }, {
+                    "name" : "SequencingLabID",
+                    "titles" : "SequencingLabID",
+                    "dc:description" : "Foreign Key into the sequencing table",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#seqReference",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingSnpSetName",
+                    "titles" : "GenotypingSnpSetName",
+                    "dc:description" : "Standardized Name of the SNP set (can be \"1240K\", \"1000_Genomes\" or \"Other\"",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "1240K|1000_Genomes|Other"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingSnpSetName",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingPositionsFile",
+                    "titles" : "GenotypingPositionsFile",
+                    "dc:description" : "URL or filename of the positions file",
+                    "datatype" : "anyURI",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingPositionsFile",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingGenotypeFile",
+                    "titles" : "GenotypingGenotypeFile",
+                    "dc:description" : "URL or filename of the genotype matrix file",
+                    "datatype" : "anyURI",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingGenotypeFile",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingFileFormat",
+                    "titles" : "GenotypingFileFormat",
+                    "dc:description" : "Format of the genotyping file. Can be \"EIGENSTRAT\" or \"PLINK\"",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "EIGENSTRAT|PLINK"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingFileFormat",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingColumnPosition",
+                    "titles" : "GenotypingColumnPosition",
+                    "dc:description" : "1-based Column position of the sample in the genotype matrix.",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingColumnPosition",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingMethod",
+                    "titles" : "GenotypingMethod",
+                    "dc:description" : "Method of the genotyping. Can be \"RandomReadSampling\", \"MajorityReadSampling\", \"DiploidModelBased\" or \"Other\"",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "RandomReadSampling|MajorityReadSampling|DiploidModelBased|Other"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingMethod",
+                    "required" : true
+                }, {
+                    "name" : "GenotypingTool",
+                    "titles" : "GenotypingTool",
+                    "dc:description" : "Tool used for genotyping, such as \"pileupCaller\" or \"GATK\"",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingTool"
+                }, {
+                    "name" : "NrSnpsTotal",
+                    "titles": "NrSnpsTotal",
+                    "dc:description": "Total nr of SNPs attempted to call (= nr of SNPs in the file specified under GenotypingPositionsFile)",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrSnpsTotal"
+                }, {
+                    "name" : "NrSnpsCalled",
+                    "titles": "NrSnpsCalled",
+                    "dc:description": "Total nr of SNPs called (=non-missing) for this individual",
+                    "datatype" : "nonNegativeInteger",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#nrSnpsCalled"
+                }, {
+                    "name" : "GenotypingNote",
+                    "titles" : "GenotypingNote",
+                    "dc:description" : "Optional Note for genotyping",
+                    "datatype" : "string",
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#genotypingNote"
+                }, {
+                    "name" : "Source",
+                    "titles" : "Source",
+                    "dc:description" : "BibTEX key(s) for bibliographical source(s)",
+                    "separator" : ";",
+                    "datatype" : {
+                        "base" : "string",
+                        "format" : "[a-zA-Z0-9_\\-]+"
+                    },
+                    "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#source"
+                }],
+                "primaryKey" : "GenotypingID",
+                "foreignKeys": [{
+                    "columnReference": "SequencingLabID",
+                    "reference": {
+                        "resource": "sequencing.csv",
+                        "columnReference": "SequencingLabID"
+                    }
+                }]
+            }
+        }
+        
+    }]
+}
