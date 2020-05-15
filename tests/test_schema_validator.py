@@ -51,6 +51,21 @@ class TestColumnSchema:
         assert str(e.value) == ("For column \"MyName\" expected column type "
             "\"string\" but got \"OrderedDict([('base', 'string'), "
             "('format', '[Tooth|Petrous|OtherBone|OtherTissue]')])\"")
+        
+        # should raise with wrong required field
+        column_def2 = csvw.Column(name="MyName", datatype="string", required=True)
+        with pytest.raises(PoseidonSchemaError) as e:
+            v.validate(column_def2)  
+        assert str(e.value) == ("For column \"MyName\": expected column to be not required, but got required")
+        
+        column_def = csvw.Column(name="MyName", datatype="string", required=True)
+        v = ColumnValidator(column_def)
+
+        column_def2 = csvw.Column(name="MyName", datatype="string")
+        with pytest.raises(PoseidonSchemaError) as e:
+            v.validate(column_def2)  
+        assert str(e.value) == ("For column \"MyName\": expected column to be required, but got not required")
+
 
 class TestTableSchema:
     def test_constructor_needs_primary_key(self):
@@ -64,54 +79,150 @@ class TestTableSchema:
             }
         })
         with pytest.raises(PoseidonSchemaError) as e:
-            v = TableValidator(t)
-        assert str(e.value) == "TableValidator: Error for table with columns [ID, test]: Poseidon tables require exactly one primary key defined."
+            v = TableValidator("Sites", t)
+        assert str(e.value) == "TableValidator: Error for table \"Sites\" with columns [ID, test]: Poseidon tables require exactly one primary key defined."
 
-    def test_tables_need_primary_key(self):
+    def test_constructor_needs_primary_key_column(self):
         t = csvw.Table.fromvalue({
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tableSchema": {
                 "columns": [
                     {"name": "ID", "datatype": {"base": "string", "minLength": 3}},
-                    {"datatype": "string"}
+                    {"name" : "test", "datatype": "string"}
                 ],
-                "primaryKey" : "PKey",
+                "primaryKey" : "PKey"
             }
         })
-        v = TableValidator(t)
-        t2 = csvw.Table.fromvalue({
+        with pytest.raises(PoseidonSchemaError) as e:
+            v = TableValidator("Sites", t)
+        assert str(e.value) == "TableValidator: Error for table \"Sites\" with columns [ID, test]: Table needs exactly one column with the name of the primary key \"PKey\""
+
+    def test_constructor_needs_primary_key_column_required(self):
+        t = csvw.Table.fromvalue({
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tableSchema": {
                 "columns": [
                     {"name": "ID", "datatype": {"base": "string", "minLength": 3}},
-                    {"name": "test", "datatype": "string"}
-                ]
+                    {"name" : "test", "datatype": "string"}
+                ],
+                "primaryKey" : "ID"
             }
         })
         with pytest.raises(PoseidonSchemaError) as e:
-            v.match(t2)
-        assert str(e.value) == "TableValidator: Error for table with columns [ID, test]: Poseidon tables require exactly one primary key defined."
+            v = TableValidator("Sites", t)
+        assert str(e.value) == "TableValidator: Error for table \"Sites\" with columns [ID, test]: Primary key column \"ID\" must be required"
 
     def test_tables_match_primary_key(self):
         t = csvw.Table.fromvalue({
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tableSchema": {
                 "columns": [
-                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}},
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True},
                     {"name": "Test", "datatype": "string"}
                 ],
-                "primaryKey" : "PKey",
+                "primaryKey" : "ID",
             }
         })
-        v = TableValidator(t)
+        v = TableValidator("Sites", t)
         t2 = csvw.Table.fromvalue({
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tableSchema": {
                 "columns": [
-                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}},
+                    {"name": "ID2", "datatype": {"base": "string", "minLength": 3}, "required": True},
                     {"datatype": "string"}
                 ],
-                "primaryKey" : "PKey2",
+                "primaryKey" : "ID2",
             }
         })
         assert not v.match(t2)
+
+    def test_table_validate_same_table(self):
+        t = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True},
+                    {"name": "Test", "datatype": "string"}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+        v = TableValidator("Sites", t)
+        v.validate(t)
+    
+    def test_table_validate_fail_missing_cols(self):
+        t = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True},
+                    {"name": "Test", "datatype": "string", "required" : True}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+        v = TableValidator("Sites", t)
+        t2 = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required" : True}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+        with pytest.raises(PoseidonSchemaError) as e:
+            v.validate(t2)
+        assert str(e.value) == "TableValidator: Table \"Sites\" misses required column \"Test\""
+
+    def test_table_validate_succeed_non_required_missing_cols(self):
+        t = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True},
+                    {"name": "Test", "datatype": "string"}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+        v = TableValidator("Sites", t)
+        t2 = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+        v.validate(t2)
+
+    def test_table_validate_fail_wrong_column_props(self):
+        t = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True},
+                    {"name": "Test", "datatype": "string"}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+        v = TableValidator("Sites", t)
+        t2 = csvw.Table.fromvalue({
+            "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
+            "tableSchema": {
+                "columns": [
+                    {"name": "ID", "datatype": {"base": "string", "minLength": 3}, "required": True},
+                    {"name": "Test", "datatype": "integer"}
+                ],
+                "primaryKey" : "ID",
+            }
+        })
+
+        with pytest.raises(PoseidonSchemaError) as e:
+            v.validate(t2)
+        assert str(e.value) == "TableValidator: Table \"Sites\": For column \"Test\" expected column type \"string\" but got \"integer\""
+
+        

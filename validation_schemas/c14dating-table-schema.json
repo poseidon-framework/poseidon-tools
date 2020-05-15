@@ -9,7 +9,8 @@
             "base" : "string",
             "format" : "[a-zA-Z0-9_\\-]+"
         },
-        "propertyUrl" : "dc:identifier"
+        "propertyUrl" : "dc:identifier",
+        "required" : true
     }, {
         "name" : "IndividualID",
         "titles" : "IndividualID",
@@ -18,13 +19,15 @@
             "base" : "string",
             "format" : "[a-zA-Z0-9_\\-]+"
         },
-        "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#individualReference"
+        "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#individualReference",
+        "required" : true
     }, {
         "name" : "C14labName",
         "titles" : "C14labName",
         "dc:description" : "Name of the lab performing the C14 dating",
         "datatype" : "string",
-        "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14labName"
+        "propertyUrl" : "http://w3id.org/poseidon/terms.rdf.jsonld#C14labName",
+        "required" : true
     }, {
         "name" : "C14uncalDateBP",
         "titles" : "C14uncalDateBP",
