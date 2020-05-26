@@ -1,21 +1,26 @@
 import csvw
+import schema_validator
+import attr
 
-def identify_table(tablegroup, table):
-    if table not in ["Sites", "Individuals", "C14dating", "Sequencing", "Genotyping"]:
-        raise Poseidon
-
+@attr.s
 class PoseidonModule:
-    def __init__(self, csvw_tablegroup):
-        self.csvw_tablegroup = csvw_tablegroup
-        self.sites_table_name = identify_sites_table(self.csvw_tablegroup)
-        self.validate()
-        tg.check_referential_integrity()
+    table_group : csvw.TableGroup = attr.ib()
 
+    def __attrs_post_init__(self):
+        self._validate_tables()
+        self._validate_foreign_keys()
+        self._validate_metadata()
+        self._validate_genotype_data()
     
-    @classmethod
-    def fromMetadataFile(self, metadatafile):
-        tg = csvw.TableGroup.from_file(metadatafile)
-        return PoseidonModule(tg)
+    def _validate_tables(self):
+        pass
 
-    def validate(self):
+    def _validate_foreign_keys():
+        pass
+
+    def _validate_metadata():
+        pass
+
+    def _validate_genotype_data():
+        pass
 

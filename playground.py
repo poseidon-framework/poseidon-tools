@@ -1,19 +1,16 @@
 import csvw
+from csvw.db import Database
 
-tg = csvw.TableGroup.from_file('tests/testModules/myTestModule1/metadata.json')
+tg = csvw.TableGroup.from_file('tests/testModules/myTestModule1/metadata_inkl_schemas.json')
 
-t = csvw.Table.fromvalue({
-    "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
-    "tables": [
-        "tableSchema": {
-            "columns": [
-                {"name": "ID", "datatype": {"base": "string", "minLength": 3}},
-                {"name": "ID", "datatype": {"base": "string", "minLength": 3}},
-                {"name" : "test", "datatype": "string"}
-            ],
-            "primaryKey" : "ID"
-        }
-    ]
-})
+tg.check_referential_integrity()
 
-print(t.tableSchema.primaryKey)
+db = Database(tg, fname='test.sqlite')
+db.write_from_tg()
+
+# for row in tg.tables[1].iterdicts():
+#     print("Row:")
+#     for k, v in row.items():
+#         print(f"  {k}: {v}")
+
+# tg.check_referential_integrity()

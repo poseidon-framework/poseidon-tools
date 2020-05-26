@@ -81,3 +81,4 @@ class TableValidator:
             else:
                 if col.required:
                     raise PoseidonSchemaError(f"TableValidator: Table \"{self.table_name}\" misses required column \"{col.name}\"")
+    
